@@ -1,21 +1,21 @@
 <?php
+$fifo = '/Users/renbingdong/pipe.1';
 
-$fifoPath = '/Users/renbingdong/pipe.1';
-if (!posix_mkfifo($fifoPath, 0666)) {
-    die("The fifo create to be failure");        
-}
-echo "The fifo create to be successfull \n";
+echo "test start\n";
 
-$f_write = fopen($fifoPath, 'w');
-if (!$f_write) {
-    die("The fwrite create to be failure");        
-}
-echo "The fwrite create to be successfull \n";
-$f_read = fopen($fifoPath, 'r');
-if (!$f_read) {
-    die("The fread create to be failure");        
-}
-echo "The fread create to be successfull \n";
-echo "Read the fifo.. \n";
+posix_mkfifo($fifo, 0666);
+echo "mkfifo success\n";
 
+echo "open write start\n";
+$f_write = fopen($fifo, 'w');
 
+stream_set_blocking($f_write, false);
+
+echo "open write success\n";
+
+fwrite($f_write, "test");
+
+echo "write finish\n";
+
+fclose($f_write);
+unlink($fifo);
