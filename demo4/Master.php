@@ -24,10 +24,12 @@ class Master {
             $data = 'data:'. $data;
             $this->pool->dispatch($data);        
         }
+        echo "开始回收进程 \n";
+        $this->pool->recyclePool();
         echo "work finish \n";        
     }
     
     public function destoryPool() {
-            
+        
     }
 }

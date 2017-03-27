@@ -12,8 +12,26 @@ $f_write = fopen($fifo, 'w');
 
 
 echo "open write success\n";
-fwrite($f_write, "renbingdong\n");
+fwrite($f_write, "renbingdong1\n");
 echo "write finish\n";
-sleep(2);
 fclose($f_write);
+
+echo "open write start\n";
+$f_write = fopen($fifo, 'w');
+
+echo "open write success\n";
+fwrite($f_write, "renbingdong2\n");
+echo "write finish\n";
+fclose($f_write);
+
+
+echo "open write start\n";
+$f_write = fopen($fifo, 'w');
+
+echo "open write success\n";
+fwrite($f_write, "renbingdong3\n");
+echo "write finish\n";
+fclose($f_write);
+
+
 unlink($fifo);

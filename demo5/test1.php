@@ -11,8 +11,18 @@ echo "test1 \n";
 //echo $data . "\n";
 //sleep(2);
 
-//echo "test2 \n";
-//$data = fread($f_read, 1024);
-//echo $data . "\n";
+$data = fread($f_read, 1024);
+echo $data . "\n";
+fclose($f_read);
+sleep(1);
+$f_read = fopen($fifoPath, 'r');
+echo "test1 \n";
+$data = fread($f_read, 1024);
+echo $data . "\n";
+fclose($f_read);
 
+$f_read = fopen($fifoPath, 'r');
+echo "test1 \n";
+$data = fread($f_read, 1024);
+echo $data . "\n";
 fclose($f_read);

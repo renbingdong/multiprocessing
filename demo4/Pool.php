@@ -49,6 +49,7 @@ class Pool {
      */
     public function dispatch($data) {
         $pid = $this->getFreeWorker();
+        posix_kill($pid, SIGUSR1);
         echo "dispatch worker {$pid}, data: {$data} \n";
         $pipe = $this->pipe_pool[$pid];
         $pipe->write($data);    
@@ -88,5 +89,34 @@ class Pool {
         }
         $this->busy_pool = array_values($this->busy_pool);        
     }
-        
+    
+    /**
+     * 进程执行结束，回收进程
+     */
+    public function recyclePool() {
+        while (1) {
+            if (count($this->busy_pool) === 0 && count($this->free_pool) === 0) {
+                break;
+            }
+            if (count($this->free_pool) === 0) {
+                $this->_refresh();
+                usleep(100);
+                continue;
+            }
+            foreach ($this->free_pool as $key => $pid) {
+                posix_kill($pid, SIGUSR2);
+                unset($this->free_pool[$key]);
+                $pipe = $this->pipe_pool[$pid];
+                $pipe->recycle();
+            }
+        }
+        while (count($this->pool) > 0) {
+            foreach ($this->pool as $key => $pid) {
+                $res = pcntl_waitpid($pid, $status);
+                if ($res == $pid) {
+                    unset($this->pool[$key]);
+                }
+            }
+        }
+    }
 }

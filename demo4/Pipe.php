@@ -17,7 +17,7 @@ class Pipe {
         $result = posix_mkfifo($fifo_name, $mode);
         if (!$result) {
             echo "The fifo create to be failure. fifo: {$fifo_name}";
-            return;        
+            die;        
         }
         $this->fifo_name = $fifo_name;
     }
@@ -53,7 +53,7 @@ class Pipe {
         fclose($this->w_pipe);    
     }
 
-    public function __destruct() {
+    public function recycle() {
         unlink($this->fifo_name);            
     }
 }
